@@ -5,8 +5,6 @@
   vars_files:
    - variables.yml
   tasks:
-  - name: Install git on the server
-    package: name={{pkg_name1}} state=present
   - name: Install package tomcat on server
     package: name={{pkg_name}} state=present
   - name: Start tomcat Server
