@@ -1,0 +1,25 @@
+- name: Deploy war file on tomcat
+  hosts: webserver
+  become: true
+  become_user: root
+  vars_files:
+   - variables.yml
+  tasks:
+  - name: Install git on the server
+    package: name={{pkg_name1}} state=present
+  - name: Install package tomcat on server
+    package: name={{pkg_name}} state=present
+  - name: Start tomcat Server
+    service: name={{pkg_name}} state=started
+  - name: Deploy the war file on tomcat server
+    get_url:
+     url={{url}}
+     dest={{dest}}
+    notify:
+     - Restart tomcat server
+     - Print deployment message
+  handlers:
+  - name: Print deployment message
+    debug: msg="Deployment complete"
+  - name: Restart tomcat server
+    service: name={{pkg_name}} state=restarted
