@@ -1,0 +1,18 @@
+- name: Build Image and docker containers
+  hosts: webserver
+  become: true
+  become_user: root
+  tasks:
+  - name: Install packages on host server
+    package: name={{item}} state=present
+    loop:
+     - git
+     - docker
+  - name: Start docker service
+    service: name=docker state=started
+  - name: clone a repo on host server
+    git:
+     repo=https://github.com/Sonal0409/AnsibleDockerdemo.git
+     dest=/tmp/myrepo
+  - name: build the dockerfile
+    command: chdir=/tmp/myrepo docker build -t myimage:ansible .
